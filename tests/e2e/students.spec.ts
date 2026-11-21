@@ -50,9 +50,10 @@ test("AC-2.1 create a Cambridge B2 student with availability; they appear in the
   await expect(page).toHaveURL(/\/students\/[0-9a-f-]{36}$/);
   const id = idFromUrl(page);
   await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
-  await expect(page.getByText("+351912345678")).toBeVisible();
-  await expect(page.getByText("Cambridge · B2")).toBeVisible();
-  await expect(page.getByText("09:00–10:30")).toBeVisible();
+  // The previously visited list stays mounted but hidden, so only match visible text.
+  await expect(page.getByText("+351912345678").filter({ visible: true })).toBeVisible();
+  await expect(page.getByText("Cambridge · B2").filter({ visible: true })).toBeVisible();
+  await expect(page.getByText("09:00–10:30").filter({ visible: true })).toBeVisible();
 
   await page.goto(`/students?q=${encodeURIComponent(name)}`);
   await expect(page.getByRole("link", { name }).filter({ visible: true })).toBeVisible();

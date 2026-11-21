@@ -7,7 +7,8 @@ import { LOGIN_PATH } from "./route-access";
 export async function logout() {
   try {
     const supabase = await createClient();
-    await supabase.auth.signOut();
+    // "local" ends only this device's session; other devices stay logged in.
+    await supabase.auth.signOut({ scope: "local" });
   } catch {
     // Even if the auth service is unreachable, send the user to the login page.
   }

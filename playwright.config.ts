@@ -13,8 +13,13 @@ export default defineConfig({
   reporter: "list",
   use: { baseURL, trace: "on-first-retry" },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile", use: { ...devices["Pixel 5"], viewport: { width: 375, height: 740 } } },
+    { name: "setup", testMatch: /.*\.setup\.ts/ },
+    { name: "desktop", use: { ...devices["Desktop Chrome"] }, dependencies: ["setup"] },
+    {
+      name: "mobile",
+      use: { ...devices["Pixel 5"], viewport: { width: 375, height: 740 } },
+      dependencies: ["setup"],
+    },
   ],
   webServer: {
     command: `npm run dev -- --port ${PORT}`,

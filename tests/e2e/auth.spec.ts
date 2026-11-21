@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { openNavIfMobile } from "./helpers";
 
 // Next.js renders its own (empty) role="alert" route announcer, so target the form error.
 const loginError = (page: Page) => page.locator("#login-error");
@@ -49,12 +50,13 @@ test.describe("AC-1.2 login", () => {
     await page.getByRole("button", { name: "Log in" }).click();
 
     await expect(page).toHaveURL(/\/dashboard$/);
-    await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Dashboard" })).toBeVisible();
 
     // A logged-in teacher visiting /login is sent back to the Dashboard.
     await page.goto("/login");
     await expect(page).toHaveURL(/\/dashboard$/);
 
+    await openNavIfMobile(page);
     await page.getByRole("button", { name: "Log out" }).click();
     await expect(page).toHaveURL(/\/login$/);
     await page.goto("/dashboard");

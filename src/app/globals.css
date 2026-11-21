@@ -18,6 +18,11 @@
 
   --color-danger: #b42318;
   --color-danger-soft: #fef3f2;
+
+  --color-warning: #8a4b00;
+  --color-warning-soft: #fff5e0;
+  --color-success: #146c2e;
+  --color-success-soft: #eaf7ee;
 }
 
 body {

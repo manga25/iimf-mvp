@@ -55,7 +55,7 @@ async function CalendarContent({ searchParams }: Pick<PageProps<"/attendance">, 
 export default function AttendancePage({ searchParams }: PageProps<"/attendance">) {
   return (
     <>
-      <PageHeader title="Attendance" description="Weekly calendar of sessions, blocked periods and session changes." />
+      <PageHeader title="Attendance" description="Weekly calendar of sessions. Open a session to mark Late/Absent, add remarks or change it." />
       <Suspense fallback={<Loading label="Loading calendar…" />}>
         <CalendarContent searchParams={searchParams} />
       </Suspense>

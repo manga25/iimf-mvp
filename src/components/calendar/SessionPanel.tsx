@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
+import { AttendanceList } from "@/components/attendance/AttendanceList";
 import { Badge } from "@/components/ui/Badge";
 import { formatLongDate } from "@/lib/calendar/dates";
 import { MODALITY_LABELS } from "@/lib/calendar/types";
@@ -8,8 +9,7 @@ import type { SessionView } from "@/lib/calendar/view";
 import { SessionActions } from "./SessionActions";
 
 /**
- * Side panel (modal <dialog>) for one session: details, students and session actions.
- * Flow 7 adds the Late/Absent toggles and remarks to each student row.
+ * Side panel (modal <dialog>) for one session: details, attendance and session actions.
  */
 export function SessionPanel({ session, onClose }: { session: SessionView | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -53,16 +53,7 @@ export function SessionPanel({ session, onClose }: { session: SessionView | null
                 Cancelled by the blocked period “{session.blockedReason}”. Delete that period to restore the class.
               </p>
             )}
-            <section aria-labelledby={`${titleId}-students`}>
-              <h3 id={`${titleId}-students`} className="mb-2 text-sm font-semibold">
-                Students ({session.members.length})
-              </h3>
-              <ul className="divide-y divide-border rounded-md border border-border" data-testid="panel-students">
-                {session.members.map((m) => (
-                  <li key={m.id} className="px-3 py-2 text-sm">{m.full_name}</li>
-                ))}
-              </ul>
-            </section>
+            <AttendanceList session={session} headingId={`${titleId}-students`} />
             <SessionActions session={session} />
           </div>
         </div>

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 // ensurePayments(): lazy generation glue (SPEC §3.7, AC-6.6) — renders overdue messages and never throws.
 const repo = { syncPayments: vi.fn(), createOverdueNotifications: vi.fn() };
 vi.mock("@/lib/payments/repository", () => repo);
+vi.mock("next/server", () => ({ connection: async () => {} }));
 
 const { ensurePayments } = await import("@/lib/payments/sync");
 

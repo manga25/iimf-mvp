@@ -37,7 +37,7 @@ describe("calendar dates", () => {
 
 const session = (over: Partial<CalendarSession> = {}): CalendarSession => ({
   id: "s1", group_id: "g1", name: "Cambridge B2 · A", goal: "cambridge", date: "2026-11-24", start_time: "18:00",
-  end_time: "19:30", status: "scheduled", modality: "in_person", blocked_period_id: null, members: [], ...over,
+  end_time: "19:30", status: "scheduled", modality: "in_person", blocked_period_id: null, members: [], attendance: [], ...over,
 });
 const xmas: BlockedPeriod = { id: "b1", start: "2026-12-23T00:00", end: "2027-01-03T00:00", reason: "Christmas" };
 
@@ -55,6 +55,17 @@ describe("buildWeek", () => {
     ]);
     expect(week[1].sessions[2].blockedReason).toBe("Blocked period");
     expect(week[3].sessions.map((s) => s.id)).toEqual(["other-day"]);
+  });
+
+  it("opens attendance for scheduled sessions dated today or earlier, by date not time (SPEC §3.6, AC-5.4)", () => {
+    const week = buildWeek("2026-11-24", [
+      session({ id: "yesterday", date: "2026-11-23" }),
+      session({ id: "later-today", start_time: "18:00" }), // 18:00 > now 12:00, same date → open
+      session({ id: "tomorrow", date: "2026-11-25" }),
+      session({ id: "cancelled", date: "2026-11-23", status: "cancelled" }),
+    ], [], "2026-11-24T12:00");
+    const open = Object.fromEntries(week.flatMap((d) => d.sessions).map((s) => [s.id, s.canMarkAttendance]));
+    expect(open).toEqual({ yesterday: true, "later-today": true, tomorrow: false, cancelled: false });
   });
 
   it("attaches blocked periods to every day they overlap", () => {

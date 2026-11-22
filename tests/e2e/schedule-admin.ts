@@ -37,8 +37,13 @@ export async function snapshotDraft(db: SupabaseClient): Promise<DraftSnapshot> 
   return { schedule, groups, members };
 }
 
-/** Deletes every schedule (and its sessions), the E2E students, then restores the snapshot. */
+/** Deletes every schedule (and its sessions), the E2E students, notifications and blocks, then restores the snapshot. */
 export async function cleanUp(db: SupabaseClient, snapshot: DraftSnapshot) {
+  const e2eStudents = must(await db.from("students").select("id").like("full_name", `${E2E_PREFIX}%`), "list E2E students");
+  const studentIds = e2eStudents.map((s) => s.id as string);
+  if (studentIds.length) must(await db.from("notifications").delete().in("student_id", studentIds), "delete E2E notifications");
+  must(await db.from("blocked_periods").delete().like("reason", `${E2E_PREFIX}%`), "delete E2E blocked periods");
+
   const groupIds = must(await db.from("class_groups").select("id"), "list groups").map((g) => g.id as string);
   if (groupIds.length) must(await db.from("sessions").delete().in("group_id", groupIds), "delete sessions");
   must(await db.from("schedules").delete().not("id", "is", null), "delete schedules"); // cascades groups/members

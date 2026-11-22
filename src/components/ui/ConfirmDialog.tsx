@@ -7,6 +7,7 @@ type Props = {
   title: string;
   children: ReactNode;
   confirmLabel: string;
+  cancelLabel?: string;
   pending?: boolean;
   error?: string | null;
   danger?: boolean;
@@ -15,7 +16,7 @@ type Props = {
 };
 
 /** Modal confirmation built on <dialog>: focus trap, Escape to close, focus returns to the opener. */
-export function ConfirmDialog({ open, title, children, confirmLabel, pending, error, danger, onConfirm, onClose }: Props) {
+export function ConfirmDialog({ open, title, children, confirmLabel, cancelLabel = "Cancel", pending, error, danger, onConfirm, onClose }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -41,7 +42,7 @@ export function ConfirmDialog({ open, title, children, confirmLabel, pending, er
       )}
       <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button type="button" className="btn-secondary" onClick={onClose} disabled={pending} autoFocus>
-          Cancel
+          {cancelLabel}
         </button>
         <button
           type="button"

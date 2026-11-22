@@ -12,7 +12,7 @@ export function DayColumn({ day, today, onOpen, compact }: Props) {
       aria-label={formatLongDate(day.date)}
       data-testid="calendar-day"
       data-date={day.date}
-      className={`rounded-lg border p-2 ${day.date === today ? "border-primary" : "border-border"} ${
+      className={`rounded-lg border p-2 shadow-card ${day.date === today ? "border-primary ring-2 ring-primary/15" : "border-border"} ${
         blocked ? "bg-[repeating-linear-gradient(135deg,var(--color-surface-muted)_0_8px,var(--color-surface)_8px_16px)]" : "bg-surface"
       }`}
     >

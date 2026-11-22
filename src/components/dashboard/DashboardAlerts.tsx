@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ACCENT, IconBadge } from "@/components/ui/IconBadge";
 import type { DashboardAlerts as Alerts } from "@/lib/dashboard/view";
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
@@ -8,9 +9,12 @@ const link = "font-medium text-primary underline underline-offset-2 hover:text-p
 export function DashboardAlerts({ alerts }: { alerts: Alerts }) {
   const { pendingNotifications: pending, schedule, unallocated, missingAvailability: missing } = alerts;
   return (
-    <section aria-labelledby="alerts-title" className="rounded-xl border border-border bg-surface p-4 sm:p-5">
-      <h2 id="alerts-title" className="mb-3 text-base font-semibold">Alerts</h2>
-      <ul className="space-y-3 text-sm">
+    <section aria-labelledby="alerts-title" className={`card p-4 sm:p-5 ${ACCENT.warning}`}>
+      <div className="mb-3 flex items-center gap-3">
+        <IconBadge name="alert" tone="warning" />
+        <h2 id="alerts-title" className="text-base font-semibold">Alerts</h2>
+      </div>
+      <ul className="space-y-3 divide-y divide-border text-sm [&>li:not(:first-child)]:pt-3">
         <li data-testid="alert-notifications">
           <p className={pending > 0 ? "font-medium" : "text-muted"}>
             {pending > 0 ? `${plural(pending, "notification", "notifications")} waiting to be sent` : "No notifications waiting to be sent"}

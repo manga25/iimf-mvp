@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/Badge";
 import { WEEKDAY_LABELS } from "@/lib/students/labels";
 import { compatibleGroups, type GroupView } from "@/lib/schedule/view";
-import { endTime, GOAL_BORDER } from "./goalStyles";
+import { endTime, GOAL_BORDER, GOAL_PILL } from "./goalStyles";
 import { MemberRow } from "./MemberRow";
 import { RescheduleForm } from "./RescheduleForm";
 
@@ -16,7 +16,7 @@ export function GroupCard({ group, groups, editable }: { group: GroupView; group
       id={`group-${group.id}`}
       aria-labelledby={`group-${group.id}-title`}
       data-testid="group-card"
-      className={`scroll-mt-20 rounded-xl border border-l-4 bg-surface p-4 ${hasErrors ? "border-danger/50" : "border-border"} ${GOAL_BORDER[group.goal]}`}
+      className={`card card-hover scroll-mt-20 border-l-4 p-4 ${hasErrors ? "border-danger/50" : ""} ${GOAL_BORDER[group.goal]}`}
     >
       <header className="flex flex-wrap items-start justify-between gap-2">
         <div>
@@ -26,7 +26,9 @@ export function GroupCard({ group, groups, editable }: { group: GroupView; group
           </p>
         </div>
         <div className="flex flex-wrap gap-1.5">
-          <Badge tone="primary">{group.detail}</Badge>
+          <span className={`inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium ${GOAL_PILL[group.goal]}`}>
+            {group.detail}
+          </span>
           <Badge>{size} student{size === 1 ? "" : "s"}</Badge>
           {hasErrors && <Badge tone="danger">Errors</Badge>}
         </div>

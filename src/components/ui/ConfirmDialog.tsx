@@ -33,7 +33,7 @@ export function ConfirmDialog({ open, title, children, confirmLabel, cancelLabel
       aria-labelledby={titleId}
       onClose={onClose}
       onCancel={(e) => pending && e.preventDefault()}
-      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-xl border border-border bg-surface p-6 text-foreground shadow-xl backdrop:bg-black/40"
+      className="m-auto w-[calc(100%-2rem)] max-w-md card p-6 text-foreground shadow-xl backdrop:bg-black/40"
     >
       <h2 id={titleId} className="text-lg font-semibold">{title}</h2>
       <div className="mt-2 text-sm text-muted">{children}</div>

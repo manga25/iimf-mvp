@@ -30,7 +30,7 @@ export function AttendanceRow({ sessionId, member, record }: Props) {
   }
 
   return (
-    <li className="px-3 py-3 text-sm" data-testid="attendance-row" data-student={member.full_name} data-status={record.status}>
+    <li className="px-3 py-3 text-sm transition-colors hover:bg-slate-50" data-testid="attendance-row" data-student={member.full_name} data-status={record.status}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="flex min-w-0 items-center gap-2">
           <span className="truncate font-medium">{member.full_name}</span>

@@ -1,32 +1,60 @@
 @import "tailwindcss";
 
-/* Design tokens — all text/background pairs meet WCAG AA contrast. */
+/*
+ * Design tokens — Dark Navy + Indigo palette. Swap the values here to re-theme the app.
+ * All text/background pairs meet WCAG AA contrast.
+ */
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
+  /* Surfaces & text (slate scale) */
   --color-surface: #ffffff;
-  --color-surface-muted: #f6f7f9;
-  --color-border: #d9dde3;
-  --color-foreground: #16181d;
-  --color-muted: #545b66;
+  --color-surface-muted: #f1f5f9;
+  --color-canvas: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-foreground: #0f172a;
+  --color-muted: #475569;
 
-  --color-primary: #3442b8;
-  --color-primary-hover: #2a368f;
-  --color-primary-soft: #eceefb;
+  /* Brand (indigo) */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-soft: #eef2ff;
   --color-on-primary: #ffffff;
 
-  --color-danger: #b42318;
-  --color-danger-soft: #fef3f2;
+  /* Sidebar (dark navy) */
+  --color-sidebar: #0f172a;
+  --color-sidebar-hover: #1e293b;
+  --color-sidebar-border: #1e293b;
+  --color-sidebar-text: #cbd5e1;
+  --color-sidebar-ring: #818cf8;
 
-  --color-warning: #8a4b00;
-  --color-warning-soft: #fff5e0;
-  --color-success: #146c2e;
-  --color-success-soft: #eaf7ee;
+  /* Status */
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-warning: #92400e;
+  --color-warning-soft: #fffbeb;
+  --color-success: #047857;
+  --color-success-soft: #ecfdf5;
+
+  /* Class types (goal colour-coding: schedule, calendar, dashboard) */
+  --color-goal-cambridge: #7c3aed;
+  --color-goal-cambridge-soft: #f3f0ff;
+  --color-goal-cambridge-text: #5b21b6;
+  --color-goal-school: #059669;
+  --color-goal-school-soft: #ecfdf5;
+  --color-goal-school-text: #065f46;
+  --color-goal-individual: #d97706;
+  --color-goal-individual-soft: #fff7e6;
+  --color-goal-individual-text: #92400e;
+
+  --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06);
+  --shadow-card-hover: 0 4px 12px -2px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.06);
 }
 
 body {
-  background: var(--color-surface-muted);
+  background: var(--color-canvas);
   color: var(--color-foreground);
 }
 
@@ -35,18 +63,29 @@ body {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+/* Lighter ring on the dark navy surfaces so focus stays visible. */
+:where(.on-dark) :where(a, button, [tabindex]):focus-visible {
+  outline-color: var(--color-sidebar-ring);
+}
 
 @layer components {
+  .card {
+    @apply rounded-xl border border-border bg-surface shadow-card;
+  }
+  .card-hover {
+    @apply transition-[box-shadow,border-color,background-color] duration-150 hover:border-primary/30 hover:shadow-card-hover;
+  }
   .input {
-    @apply block w-full rounded-md border border-border bg-surface px-3 py-2 text-base
-      placeholder:text-muted focus:border-primary aria-invalid:border-danger;
+    @apply block w-full rounded-lg border border-border-strong bg-surface px-3 py-2 text-base shadow-xs transition-colors
+      placeholder:text-muted hover:border-muted/50 focus:border-primary aria-invalid:border-danger;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-semibold
-      text-on-primary transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold
+      text-on-primary shadow-sm shadow-primary/20 transition-colors hover:bg-primary-hover
+      disabled:cursor-not-allowed disabled:opacity-60;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-md border border-border bg-surface px-4 py-2 text-sm
-      font-medium transition-colors hover:bg-surface-muted;
+    @apply inline-flex items-center justify-center rounded-lg border border-border-strong bg-surface px-4 py-2 text-sm
+      font-medium shadow-xs transition-colors hover:border-primary/40 hover:bg-primary-soft hover:text-primary;
   }
 }

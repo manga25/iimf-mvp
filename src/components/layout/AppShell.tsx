@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { logout } from "@/lib/auth/actions";
 import { ActiveNavLinks, NavLinks } from "./NavLinks";
-import { Icon } from "./icons";
+import { BrandMark, Icon } from "./icons";
 import { useDrawerFocus } from "./useDrawerFocus";
 
 const SIDEBAR_ID = "app-sidebar";
@@ -31,23 +31,26 @@ export function AppShell({ children }: { children: ReactNode }) {
       </a>
 
       {/* Mobile top bar */}
-      <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-surface px-4 lg:hidden">
+      <header className="on-dark sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-sidebar-border bg-sidebar px-4 text-white shadow-sm lg:hidden">
         <button
           ref={toggleRef}
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls={SIDEBAR_ID}
-          className="-ml-2 rounded-md p-2 text-foreground hover:bg-surface-muted"
+          className="-ml-2 rounded-lg p-2 text-sidebar-text transition-colors hover:bg-sidebar-hover hover:text-white"
         >
           <Icon name={open ? "close" : "menu"} />
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
         </button>
-        <span className="font-semibold">IIMF</span>
+        <span className="flex items-center gap-2 font-semibold tracking-tight">
+          <BrandMark className="size-7" />
+          IIMF
+        </span>
       </header>
 
       {/* Backdrop (mobile only) */}
-      {open && <div className="fixed inset-0 z-30 bg-foreground/40 lg:hidden" onClick={close} aria-hidden="true" />}
+      {open && <div className="fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-[1px] lg:hidden" onClick={close} aria-hidden="true" />}
 
       <aside
         id={SIDEBAR_ID}
@@ -55,15 +58,18 @@ export function AppShell({ children }: { children: ReactNode }) {
         aria-label="Main navigation"
         // Visibility switches instantly on open (so focus() can land inside the drawer)
         // and only transitions on close (so the slide-out animation stays visible).
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-border bg-surface duration-200 lg:visible lg:translate-x-0 ${
+        className={`on-dark fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-text duration-200 lg:visible lg:translate-x-0 ${
           open ? "visible translate-x-0 transition-[translate]" : "invisible -translate-x-full transition-[translate,visibility]"
         }`}
       >
         <div className="flex h-14 items-center justify-between px-5 lg:h-16">
-          <span className="text-lg font-semibold tracking-tight">
-            IIMF <span className="sr-only">— Instituto de Inglês Margarida Freitas</span>
+          <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-white">
+            <BrandMark />
+            <span>
+              IIMF <span className="sr-only">— Instituto de Inglês Margarida Freitas</span>
+            </span>
           </span>
-          <button type="button" onClick={close} className="rounded-md p-2 text-muted hover:bg-surface-muted lg:hidden">
+          <button type="button" onClick={close} className="rounded-lg p-2 text-sidebar-text transition-colors hover:bg-sidebar-hover hover:text-white lg:hidden">
             <Icon name="close" />
             <span className="sr-only">Close menu</span>
           </button>
@@ -75,10 +81,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Suspense>
         </nav>
 
-        <form action={logout} className="border-t border-border p-3">
+        <form action={logout} className="border-t border-sidebar-border p-3">
           <button
             type="submit"
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted hover:bg-surface-muted hover:text-foreground"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-text transition-colors hover:bg-sidebar-hover hover:text-white"
           >
             <Icon name="logout" />
             Log out

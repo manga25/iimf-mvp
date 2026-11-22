@@ -1,4 +1,4 @@
-import { GOAL_BORDER, GOAL_TINT } from "@/components/schedule/goalStyles";
+import { GOAL_BORDER, GOAL_HOVER, GOAL_TINT } from "@/components/schedule/goalStyles";
 import { Badge } from "@/components/ui/Badge";
 import type { SessionView } from "@/lib/calendar/view";
 
@@ -15,9 +15,9 @@ export function SessionCard({ session, onOpen }: { session: SessionView; onOpen:
       data-status={session.status}
       aria-label={`Open ${label}`}
       onClick={() => onOpen(session.id)}
-      className={`block w-full rounded-md border-l-4 px-2 py-1.5 text-left text-xs transition-shadow hover:shadow-sm ${
+      className={`block w-full rounded-md border-l-4 px-2 py-1.5 text-left text-xs shadow-xs transition-[box-shadow,background-color] hover:shadow-card-hover ${
         GOAL_BORDER[session.goal]
-      } ${cancelled ? "bg-surface-muted text-muted" : GOAL_TINT[session.goal]}`}
+      } ${cancelled ? "bg-surface-muted text-muted" : `${GOAL_TINT[session.goal]} ${GOAL_HOVER[session.goal]}`}`}
     >
       <span className={`font-semibold tabular-nums ${cancelled ? "line-through" : ""}`}>
         {session.start_time}–{session.end_time}

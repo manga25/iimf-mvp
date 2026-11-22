@@ -18,7 +18,7 @@ const GOAL_HINTS: Record<Goal, string> = {
 function Section({ title, description, children }: { title: string; description?: string; children: ReactNode }) {
   const id = useId();
   return (
-    <section aria-labelledby={id} className="rounded-xl border border-border bg-surface p-4 sm:p-6">
+    <section aria-labelledby={id} className="card p-4 sm:p-6">
       <h2 id={id} className="text-base font-semibold">{title}</h2>
       {description && <p className="mt-0.5 text-sm text-muted">{description}</p>}
       <div className="mt-4 space-y-4">{children}</div>

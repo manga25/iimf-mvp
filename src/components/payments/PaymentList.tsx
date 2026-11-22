@@ -29,7 +29,7 @@ export function PaymentList({ payments, today, filtered }: { payments: Payment[]
 
       <ul className="space-y-3 md:hidden" aria-label="Payments">
         {payments.map((p) => (
-          <li key={p.id} className="rounded-xl border border-border bg-surface p-4" data-testid="payment-row">
+          <li key={p.id} className="card card-hover p-4" data-testid="payment-row">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-semibold">{p.student_name}</p>
@@ -47,10 +47,10 @@ export function PaymentList({ payments, today, filtered }: { payments: Payment[]
         ))}
       </ul>
 
-      <div className="hidden overflow-x-auto rounded-xl border border-border bg-surface md:block">
+      <div className="hidden overflow-x-auto card md:block">
         <table className="w-full text-left text-sm">
           <caption className="sr-only">Payments</caption>
-          <thead className="border-b border-border bg-surface-muted text-xs uppercase tracking-wide text-muted">
+          <thead className="border-b border-border bg-slate-50 text-xs uppercase tracking-wide text-muted">
             <tr>
               <th scope="col" className="px-4 py-3 font-semibold">Student</th>
               <th scope="col" className="px-4 py-3 text-right font-semibold">Hours</th>
@@ -62,7 +62,7 @@ export function PaymentList({ payments, today, filtered }: { payments: Payment[]
           </thead>
           <tbody className="divide-y divide-border">
             {payments.map((p) => (
-              <tr key={p.id} data-testid="payment-row">
+              <tr key={p.id} data-testid="payment-row" className="transition-colors hover:bg-primary-soft/50">
                 <th scope="row" className="px-4 py-3 font-medium">
                   {p.student_name}
                   <span className="block text-xs font-normal text-muted">{GOAL_LABELS[p.goal]}</span>

@@ -31,7 +31,7 @@ export function StudentList({ students, filtered }: { students: Student[]; filte
 
       <ul className="space-y-3 md:hidden" aria-label="Students">
         {students.map((s) => (
-          <li key={s.id} className="rounded-xl border border-border bg-surface p-4">
+          <li key={s.id} className="card card-hover p-4">
             <div className="flex items-start justify-between gap-3">
               <Link href={`/students/${s.id}`} className="font-semibold text-primary hover:underline">{s.full_name}</Link>
               <StatusBadge active={s.is_active} />
@@ -45,10 +45,10 @@ export function StudentList({ students, filtered }: { students: Student[]; filte
         ))}
       </ul>
 
-      <div className="hidden overflow-hidden rounded-xl border border-border bg-surface md:block">
+      <div className="hidden overflow-hidden card md:block">
         <table className="w-full text-left text-sm">
           <caption className="sr-only">Students</caption>
-          <thead className="border-b border-border bg-surface-muted text-xs uppercase tracking-wide text-muted">
+          <thead className="border-b border-border bg-slate-50 text-xs uppercase tracking-wide text-muted">
             <tr>
               <th scope="col" className="px-4 py-3 font-semibold">Name</th>
               <th scope="col" className="px-4 py-3 font-semibold">Goal</th>
@@ -60,7 +60,7 @@ export function StudentList({ students, filtered }: { students: Student[]; filte
           </thead>
           <tbody className="divide-y divide-border">
             {students.map((s) => (
-              <tr key={s.id} className="hover:bg-surface-muted">
+              <tr key={s.id} className="transition-colors hover:bg-primary-soft/50">
                 <td className="px-4 py-3">
                   <Link href={`/students/${s.id}`} className="font-medium text-primary hover:underline">{s.full_name}</Link>
                 </td>

@@ -6,7 +6,7 @@ import { GOALS } from "@/lib/students/types";
 /** Search by name + filter by goal and status. A plain GET form: works without JS and by keyboard. */
 export function StudentFilters({ filters }: { filters: Filters }) {
   return (
-    <Form action="/students" role="search" aria-label="Filter students" className="mb-4 grid gap-3 rounded-xl border border-border bg-surface p-4 sm:grid-cols-[1fr_auto_auto_auto] sm:items-end">
+    <Form action="/students" role="search" aria-label="Filter students" className="mb-4 grid gap-3 card p-4 sm:grid-cols-[1fr_auto_auto_auto] sm:items-end">
       <div className="space-y-1.5">
         <label htmlFor="q" className="block text-sm font-medium">Search by name</label>
         <input id="q" name="q" type="search" defaultValue={filters.q} placeholder="e.g. Ana" className="input" />

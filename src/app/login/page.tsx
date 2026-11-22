@@ -12,7 +12,7 @@ export default function LoginPage() {
           <h1 className="mt-1 text-2xl font-semibold">Instituto de Inglês Margarida Freitas</h1>
           <p className="mt-2 text-sm text-muted">Log in to manage students, classes and payments.</p>
         </div>
-        <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
+        <div className="card p-6 shadow-sm">
           <LoginForm />
         </div>
       </div>

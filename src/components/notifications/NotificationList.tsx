@@ -11,7 +11,7 @@ const when = (timestamp: string) => formatLocalDateTime(toLisbonLocal(timestamp)
 function NotificationCard({ n }: { n: Notification }) {
   const to = n.recipient === "guardian" ? `${n.recipient_name} (guardian of ${n.student_name})` : `${n.recipient_name} (student)`;
   return (
-    <li className="rounded-xl border border-border bg-surface p-4" data-testid="notification-row" data-status={n.status} data-type={n.type}>
+    <li className="card card-hover p-4" data-testid="notification-row" data-status={n.status} data-type={n.type}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="font-semibold">{TYPE_LABELS[n.type]}</p>

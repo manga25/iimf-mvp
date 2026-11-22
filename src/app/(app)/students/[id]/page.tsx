@@ -16,7 +16,7 @@ export const metadata: Metadata = { title: "Student" };
 
 function Card({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-xl border border-border bg-surface p-4 sm:p-6">
+    <section className="card p-4 sm:p-6">
       <h2 className="mb-3 text-base font-semibold">{title}</h2>
       {children}
     </section>

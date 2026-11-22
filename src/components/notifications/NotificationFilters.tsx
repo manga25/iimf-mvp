@@ -7,7 +7,7 @@ import {
 /** Type + status filters. A plain GET form: works without JS and by keyboard (AC-7.4). */
 export function NotificationFilters({ filters }: { filters: Filters }) {
   return (
-    <Form action="/notifications" role="search" aria-label="Filter notifications" className="mb-4 grid gap-3 rounded-xl border border-border bg-surface p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+    <Form action="/notifications" role="search" aria-label="Filter notifications" className="mb-4 grid gap-3 card p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
       <div className="space-y-1.5">
         <label htmlFor="notification-type-filter" className="block text-sm font-medium">Type</label>
         <select id="notification-type-filter" name="type" defaultValue={filters.type} className="input">

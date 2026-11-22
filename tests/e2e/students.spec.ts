@@ -1,11 +1,23 @@
 import { expect, test, type Page } from "@playwright/test";
 import { AUTH_STATE } from "./helpers";
+import { adminClient } from "./schedule-admin";
 
 test.use({ storageState: AUTH_STATE });
 
 // Every student created here gets a unique "E2E …" name and is deactivated at the end,
-// so test data never ends up in schedule generation.
+// so test data never ends up in schedule generation. The app has no delete, so afterAll
+// then removes exactly the students this worker created, with the test-only service-role
+// client (skipped when SUPABASE_SERVICE_ROLE_KEY is not set; they stay deactivated).
 const uniqueName = (label: string, project: string) => `E2E ${label} ${project} ${Date.now().toString(36)}`;
+const created: string[] = [];
+const track = (id: string) => (created.push(id), id);
+
+test.afterAll(async () => {
+  const db = adminClient();
+  if (!db || created.length === 0) return;
+  const { error } = await db.from("students").delete().in("id", created.splice(0));
+  if (error) throw new Error(`delete E2E students: ${error.message}`);
+});
 const idFromUrl = (page: Page) => new URL(page.url()).pathname.split("/")[2];
 const deactivateViaApi = (page: Page, id: string) => page.request.post(`/api/students/${id}/deactivate`);
 const cell = (page: Page, name: string) => page.getByRole("button", { name, exact: true });
@@ -28,7 +40,7 @@ async function createViaApi(page: Page, full_name: string) {
     data: { full_name, phone: "912345678", goal: "individual", availability: [{ weekday: 2, start_time: "10:00", end_time: "11:00" }] },
   });
   expect(res.status()).toBe(201);
-  return ((await res.json()) as { id: string }).id;
+  return track(((await res.json()) as { id: string }).id);
 }
 
 test("AC-2.1 create a Cambridge B2 student with availability; they appear in the list", async ({ page }, info) => {
@@ -48,7 +60,7 @@ test("AC-2.1 create a Cambridge B2 student with availability; they appear in the
 
   await page.getByRole("button", { name: "Create student" }).click();
   await expect(page).toHaveURL(/\/students\/[0-9a-f-]{36}$/);
-  const id = idFromUrl(page);
+  const id = track(idFromUrl(page));
   await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
   // The previously visited list stays mounted but hidden, so only match visible text.
   await expect(page.getByText("+351912345678").filter({ visible: true })).toBeVisible();

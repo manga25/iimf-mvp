@@ -8,7 +8,8 @@ const baseURL = `http://localhost:${PORT}`;
 const SCHEDULE_SPEC = /schedule\.spec\.ts/;
 const CALENDAR_SPEC = /calendar\.spec\.ts/;
 const ATTENDANCE_SPEC = /attendance\.spec\.ts/;
-const SOLO_SPECS = [SCHEDULE_SPEC, CALENDAR_SPEC, ATTENDANCE_SPEC];
+const PAYMENTS_SPEC = /payments\.spec\.ts/;
+const SOLO_SPECS = [SCHEDULE_SPEC, CALENDAR_SPEC, ATTENDANCE_SPEC, PAYMENTS_SPEC];
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -29,6 +30,7 @@ export default defineConfig({
     { name: "schedule", use: { ...devices["Desktop Chrome"] }, dependencies: ["desktop", "mobile"], testMatch: SCHEDULE_SPEC },
     { name: "calendar", use: { ...devices["Desktop Chrome"] }, dependencies: ["schedule"], testMatch: CALENDAR_SPEC },
     { name: "attendance", use: { ...devices["Desktop Chrome"] }, dependencies: ["calendar"], testMatch: ATTENDANCE_SPEC },
+    { name: "payments", use: { ...devices["Desktop Chrome"] }, dependencies: ["attendance"], testMatch: PAYMENTS_SPEC },
   ],
   webServer: {
     command: `npm run dev -- --port ${PORT}`,

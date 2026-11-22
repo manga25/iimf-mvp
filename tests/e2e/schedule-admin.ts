@@ -37,8 +37,14 @@ export async function snapshotDraft(db: SupabaseClient): Promise<DraftSnapshot> 
   return { schedule, groups, members };
 }
 
-/** Deletes every schedule (and its sessions), the E2E students, notifications and blocks, then restores the snapshot. */
+/**
+ * Deletes every schedule (and its sessions), every payment, the E2E students, notifications and blocks,
+ * then restores the snapshot. Payments can only exist while a schedule is approved, and the specs
+ * refuse to run when one already exists, so every payment here was created by the lazy sync during the run.
+ */
 export async function cleanUp(db: SupabaseClient, snapshot: DraftSnapshot) {
+  must(await db.from("notifications").delete().eq("type", "overdue"), "delete overdue notifications");
+  must(await db.from("payments").delete().not("id", "is", null), "delete payments");
   const e2eStudents = must(await db.from("students").select("id").like("full_name", `${E2E_PREFIX}%`), "list E2E students");
   const studentIds = e2eStudents.map((s) => s.id as string);
   if (studentIds.length) must(await db.from("notifications").delete().in("student_id", studentIds), "delete E2E notifications");

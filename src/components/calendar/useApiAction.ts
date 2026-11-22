@@ -17,7 +17,7 @@ export function useApiAction() {
   const [refreshing, startTransition] = useTransition();
   const [failure, setFailure] = useState<ApiFailure | null>(null);
 
-  async function run(method: "POST" | "PUT" | "DELETE", path: string, body?: unknown): Promise<boolean> {
+  async function run(method: "POST" | "PUT" | "PATCH" | "DELETE", path: string, body?: unknown): Promise<boolean> {
     setSending(true);
     setFailure(null);
     try {

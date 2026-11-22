@@ -9,7 +9,8 @@ const SCHEDULE_SPEC = /schedule\.spec\.ts/;
 const CALENDAR_SPEC = /calendar\.spec\.ts/;
 const ATTENDANCE_SPEC = /attendance\.spec\.ts/;
 const PAYMENTS_SPEC = /payments\.spec\.ts/;
-const SOLO_SPECS = [SCHEDULE_SPEC, CALENDAR_SPEC, ATTENDANCE_SPEC, PAYMENTS_SPEC];
+const NOTIFICATIONS_SPEC = /notifications\.spec\.ts/;
+const SOLO_SPECS = [SCHEDULE_SPEC, CALENDAR_SPEC, ATTENDANCE_SPEC, PAYMENTS_SPEC, NOTIFICATIONS_SPEC];
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -31,6 +32,7 @@ export default defineConfig({
     { name: "calendar", use: { ...devices["Desktop Chrome"] }, dependencies: ["schedule"], testMatch: CALENDAR_SPEC },
     { name: "attendance", use: { ...devices["Desktop Chrome"] }, dependencies: ["calendar"], testMatch: ATTENDANCE_SPEC },
     { name: "payments", use: { ...devices["Desktop Chrome"] }, dependencies: ["attendance"], testMatch: PAYMENTS_SPEC },
+    { name: "notifications", use: { ...devices["Desktop Chrome"] }, dependencies: ["payments"], testMatch: NOTIFICATIONS_SPEC },
   ],
   webServer: {
     command: `npm run dev -- --port ${PORT}`,

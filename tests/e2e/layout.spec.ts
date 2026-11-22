@@ -26,6 +26,17 @@ test.describe("sidebar layout", () => {
     }
   });
 
+  test("shows a 404 page inside the app layout for unknown URLs", async ({ page }) => {
+    const res = await page.goto("/this-page-does-not-exist");
+    expect(res?.status()).toBe(404);
+    await expect(page.getByRole("heading", { level: 1, name: "Page not found" })).toBeVisible();
+    await openNavIfMobile(page);
+    await expect(sidebar(page).getByRole("navigation", { name: "Sections" }).getByRole("link")).toHaveText(NAV_LABELS);
+    await page.keyboard.press("Escape");
+    await page.getByRole("link", { name: "Go to the Dashboard" }).click();
+    await expect(page).toHaveURL(/\/dashboard$/);
+  });
+
   test("has no horizontal scroll", async ({ page }) => {
     await page.goto("/students");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

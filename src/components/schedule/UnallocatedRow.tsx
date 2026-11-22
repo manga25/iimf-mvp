@@ -57,13 +57,13 @@ function Actions({ student, targets }: Omit<Props, "editable">) {
 /** An unallocated student with the goal/level, the reason and, on a draft, how to give them a class. */
 export function UnallocatedRow({ student, targets, editable }: Props) {
   return (
-    <li className="grid gap-2 py-3 sm:grid-cols-[minmax(0,1fr)_20rem] sm:items-center sm:gap-4" data-testid="unallocated">
-      <div className="min-w-0">
+    <li className="flex min-w-0 flex-col py-3" data-testid="unallocated">
+      <div className="min-w-0 break-words">
         <p><StudentLink id={student.id} name={student.full_name} /></p>
         <p className="text-sm text-muted">{student.detail}</p>
         <p className="text-xs text-muted">{student.reason}</p>
       </div>
-      {editable && <div className="min-w-0"><Actions student={student} targets={targets} /></div>}
+      {editable && <div className="mt-2 min-w-0 max-w-full"><Actions student={student} targets={targets} /></div>}
     </li>
   );
 }

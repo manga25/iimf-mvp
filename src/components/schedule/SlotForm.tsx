@@ -31,26 +31,26 @@ export function SlotForm({ duration, initial, submitLabel, ariaLabel, requireCha
 
   return (
     <form
-      className="flex flex-col gap-2"
+      className="flex min-w-0 max-w-full flex-col gap-2"
       onSubmit={(e) => {
         e.preventDefault();
         void run("/api/schedule/edits", body(weekday, start));
       }}
     >
-      <div className="flex flex-wrap items-end gap-2">
-        <div>
+      <div className="flex min-w-0 flex-wrap items-end gap-2">
+        <div className="min-w-0 max-w-full">
           <label htmlFor={`${id}-day`} className="block text-xs font-medium text-muted">Day</label>
           <select id={`${id}-day`} className="input py-1.5 text-sm" value={weekday} onChange={(e) => setWeekday(Number(e.target.value))}>
             {WEEKDAY_LABELS.map((d, i) => <option key={d} value={i + 1}>{d}</option>)}
           </select>
         </div>
-        <div>
+        <div className="min-w-0 max-w-full">
           <label htmlFor={`${id}-start`} className="block text-xs font-medium text-muted">Start</label>
           <select id={`${id}-start`} className="input py-1.5 text-sm tabular-nums" value={start} onChange={(e) => setStart(e.target.value)}>
             {startTimes(duration).map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
-        <button type="submit" className="btn-secondary py-1.5" aria-label={ariaLabel} disabled={unchanged || pending}>
+        <button type="submit" className="btn-secondary shrink-0 py-1.5" aria-label={ariaLabel} disabled={unchanged || pending}>
           {pending ? "Saving…" : submitLabel}
         </button>
       </div>

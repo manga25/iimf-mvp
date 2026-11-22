@@ -1,4 +1,5 @@
 import "server-only";
+import { connection } from "next/server";
 import { cache } from "react";
 import { buildOverdueNotifications } from "@/lib/notifications/overdue";
 import { createOverdueNotifications, syncPayments } from "./repository";
@@ -10,6 +11,8 @@ import { createOverdueNotifications, syncPayments } from "./repository";
  * A failure is logged and never breaks the page.
  */
 export const ensurePayments = cache(async (): Promise<void> => {
+  // Outside the try: during prerendering this must reach React, not the catch below.
+  await connection();
   try {
     const overdue = await syncPayments();
     if (overdue.length > 0) await createOverdueNotifications(buildOverdueNotifications(overdue));

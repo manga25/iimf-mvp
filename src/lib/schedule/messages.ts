@@ -10,7 +10,12 @@ export const SM = {
   studentInactive: "This student has been deactivated and can't be assigned.",
   alreadyInGroup: "The student is already in this class.",
   notInGroup: "The student isn't in any class.",
+  notIndividual: "Only Individual students can get a class of their own.",
+  alreadyAllocated: "The student already has a class in this draft.",
   blocked: (reason: string) => `This change can't be saved: ${reason}`,
+  outsideAvailability: (names: string[], slot: string) =>
+    `This change can't be saved: ${names.join(", ")} ${names.length === 1 ? "is" : "are"} not available on ${slot}. ` +
+    "Pick a day and time inside their weekly availability.",
   locked: "The schedule has been approved and can no longer be changed.",
   unreadable: "We couldn't read the request. Please reload the page and try again.",
   serverError: "Something went wrong while saving the schedule. Please try again in a moment.",

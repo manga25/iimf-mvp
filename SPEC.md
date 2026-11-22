@@ -111,7 +111,8 @@ Each allocated student has **exactly one class per week**.
 
 **Draft & approval:**
 - Generating creates a **draft** schedule. Generating again replaces the draft (confirmation dialog: manual edits will be lost).
-- Manual edits on the draft: move a student between compatible groups, assign an unallocated student to a group, remove a student from a group (→ unallocated), change a class's weekday/start time.
+- Manual edits on the draft: move a student between compatible groups, assign an unallocated student to a group, remove a student from a group (→ unallocated), change a class's weekday/start time, create a new individual class (day + start time) for an unallocated Individual student.
+- Changing a class's weekday/start time, or creating an individual class, is **blocked** (not just warned, unlike S2 for other edits) when any of its students is not available for the whole new interval; the error names those students.
 - **Approve** requires zero hard-constraint violations. It shows a summary (classes, allocated/unallocated students, soft warnings) and asks for confirmation.
 - Approval is **irreversible** in the MVP: it generates all sessions for the term, applying existing blocked periods, and makes Students and Schedule read-only.
 - Only one schedule can be approved.
@@ -325,7 +326,7 @@ Format: **Given / When / Then**. Each item maps to at least one automated test (
 - AC-3.6 (U) Students with different levels/years are never placed in the same group.
 - AC-3.7 (U) Individual students get 60-min classes; groups get 90-min classes.
 - AC-3.8 (U) Same input → same output (determinism).
-- AC-3.9 (E) Manual edit that creates an overlap or an 8th member is blocked with an error; one that leaves a group with 2 members or places a student outside availability shows a warning but is saved.
+- AC-3.9 (E) Manual edit that creates an overlap or an 8th member is blocked with an error; one that leaves a group with 2 members or assigns a student to a class outside their availability shows a warning but is saved. A time change (or a new individual class) outside any of its students' availability is blocked with an error.
 - AC-3.10 (E) Regenerate asks for confirmation and replaces the draft.
 - AC-3.11 (U/E) Approve with hard violations is impossible; approve with none creates sessions for every week from 1 Sep to 31 Jul, and the Schedule and Students pages become read-only.
 

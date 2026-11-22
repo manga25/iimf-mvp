@@ -111,26 +111,29 @@ test("AC-3.9 an 8th member or an overlap is blocked with an error", async ({ pag
   await expect(members(card(page, "Year 1 · B"))).toHaveCount(7);
 });
 
-test("AC-3.9 a group of 2 or a time outside availability shows a warning but is saved", async ({ page }) => {
+test("AC-3.9 a group of 2 shows a warning but is saved; a time outside availability is blocked", async ({ page }) => {
   await page.goto("/schedule");
   const b = card(page, "Year 1 · B");
+  const header = (await b.locator("header p").textContent())!.trim();
   for (let i = 0; i < 5; i++) {
     const name = (await members(b).first().locator("span").first().textContent())!.trim();
     await removeMember(page, b, name);
   }
   await expect(b).toContainText("Warning: Year 1 · B has only 2 students (minimum 3 recommended).");
+  const removed = page.getByTestId("unallocated").filter({ hasText: "Removed manually" });
+  await expect(removed).toHaveCount(5);
+  await expect(removed.first().getByRole("link")).toHaveAttribute("href", /^\/students\/[0-9a-f-]{36}$/);
+  await expect(members(b).first().getByRole("link")).toHaveAttribute("href", /^\/students\/[0-9a-f-]{36}$/);
 
   await b.getByLabel("Day", { exact: true }).selectOption({ label: "Sunday" });
   await b.getByLabel("Start", { exact: true }).selectOption("08:00");
   await b.getByRole("button", { name: "Change time" }).click();
-  await expect(b.locator("header p")).toContainText("Sunday · 08:00–09:30");
+  await expect(b.getByRole("alert")).toContainText("not available on Sunday 08:00–09:30");
 
   await page.reload();
   const saved = card(page, "Year 1 · B");
   await expect(members(saved)).toHaveCount(2);
-  await expect(saved).toContainText("is on a weekend (Sunday)");
-  await expect(saved.getByText(/is not available for the whole Year 1 · B class/)).toHaveCount(2);
-  await expect(page.getByTestId("unallocated").filter({ hasText: "Removed manually" })).toHaveCount(5);
+  await expect(saved.locator("header p")).toHaveText(header);
 });
 
 test("AC-3.10 Regenerate asks for confirmation and replaces the draft", async ({ page }) => {

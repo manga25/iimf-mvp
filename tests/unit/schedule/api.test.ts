@@ -93,6 +93,23 @@ describe("POST /api/schedule/edits (AC-3.9)", () => {
     expect(await res.json()).toEqual({ warnings: [] });
   });
 
+  it("creates an individual class for an unallocated Individual student and saves it", async () => {
+    repo.listScheduleStudents.mockResolvedValue([...students, student(5, { full_name: "Solo", goal: "individual", cefr_level: null })]);
+    const res = await edit(req({ type: "create_individual", student_id: uid(5), weekday: 2, start_time: "17:00" }), {});
+    expect(res.status).toBe(200);
+    expect(repo.saveDraft).toHaveBeenCalledWith([
+      expect.objectContaining({ id: GID }),
+      expect.objectContaining({ name: "Individual · Solo", goal: "individual", weekday: 2, start_time: "17:00", duration_min: 60, member_ids: [uid(5)] }),
+    ], false);
+  });
+
+  it("rejects a time change outside the members' availability and saves nothing", async () => {
+    const res = await edit(req({ type: "reschedule", group_id: GID, weekday: 3, start_time: "18:00" }), {});
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toBe(SM.outsideAvailability(["Student 1", "Student 2", "Student 3"], "Wednesday 18:00–19:30"));
+    expect(repo.saveDraft).not.toHaveBeenCalled();
+  });
+
   it("returns 400 for malformed input, 404 without a draft, 409 after approval", async () => {
     expect((await edit(req("{bad"), {})).status).toBe(400);
     expect((await edit(req({ type: "remove", student_id: "x" }), {})).status).toBe(400);

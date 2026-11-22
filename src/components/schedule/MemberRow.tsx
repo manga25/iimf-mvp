@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import type { GroupView, MemberView } from "@/lib/schedule/view";
 import { InlineAlert } from "./InlineAlert";
+import { StudentLink } from "./StudentLink";
 import { useScheduleAction } from "./useScheduleAction";
 
 type Props = { member: MemberView; targets: GroupView[]; editable: boolean };
@@ -16,7 +17,7 @@ export function MemberRow({ member, targets, editable }: Props) {
   return (
     <li className="py-2" data-testid="member">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <span className="text-sm font-medium">{member.full_name}</span>
+        <span className="text-sm font-medium"><StudentLink id={member.id} name={member.full_name} /></span>
         {editable && (
           <div className="flex flex-wrap items-center gap-2">
             {targets.length > 0 && (

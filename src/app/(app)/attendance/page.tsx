@@ -18,14 +18,16 @@ export const metadata: Metadata = { title: "Attendance" };
 async function CalendarContent({ searchParams }: Pick<PageProps<"/attendance">, "searchParams">) {
   await connection(); // "today" is request-time data
   const today = lisbonToday();
-  const param = (await searchParams).date;
-  const date = isIsoDate(param) ? param : today;
+  const params = await searchParams;
+  const date = isIsoDate(params.date) ? params.date : today;
   const days = weekDates(date);
 
   const [approved, sessions, blocks] = await Promise.all([
     isScheduleApproved(), listSessions(days[0], days[6]), listBlockedPeriods(),
   ]);
   const week = buildWeek(date, sessions, blocks, lisbonNow());
+  // `?session=<id>` (Dashboard quick link) opens that panel — only if the session is in this week.
+  const sessionId = sessions.some((s) => s.id === params.session) ? (params.session as string) : null;
 
   return (
     <div className="space-y-8">
@@ -38,7 +40,7 @@ async function CalendarContent({ searchParams }: Pick<PageProps<"/attendance">, 
         {approved && (
           <>
             <CalendarNav date={date} today={today} />
-            <CalendarBoard days={week} date={date} today={today} />
+            <CalendarBoard days={week} date={date} today={today} initialSessionId={sessionId} />
           </>
         )}
       </section>

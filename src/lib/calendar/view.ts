@@ -4,6 +4,8 @@ import type { BlockedPeriod, CalendarSession } from "./types";
 export type SessionView = CalendarSession & {
   /** Can still be cancelled / switched (scheduled and not finished). */
   changeable: boolean;
+  /** Late/Absent and remarks can be set: scheduled and dated today or earlier (SPEC §3.6). */
+  canMarkAttendance: boolean;
   /** Reason of the block that cancelled it, if any. */
   blockedReason: string | null;
 };
@@ -33,6 +35,7 @@ export function buildWeek(date: string, sessions: CalendarSession[], blocks: Blo
       .map((s) => ({
         ...s,
         changeable: s.status === "scheduled" && `${s.date}T${s.end_time}` > now,
+        canMarkAttendance: s.status === "scheduled" && s.date <= now.slice(0, 10),
         blockedReason: s.blocked_period_id ? (reasons.get(s.blocked_period_id) ?? "Blocked period") : null,
       })),
   }));

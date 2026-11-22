@@ -22,20 +22,25 @@ async function createClient() {
 
 const SESSION_COLUMNS =
   "id, group_id, date, start_time, end_time, status, modality, blocked_period_id, " +
-  "class_groups!inner(name, goal, group_members(students(id, full_name, phone, guardian_name, guardian_phone)))";
+  "class_groups!inner(name, goal, group_members(students(id, full_name, phone, guardian_name, guardian_phone))), " +
+  "attendance(student_id, status, remarks)";
 
-type SessionRow = Omit<CalendarSession, "name" | "goal" | "members"> & {
+type SessionRow = Omit<CalendarSession, "name" | "goal" | "members" | "attendance"> & {
   class_groups: { name: string; goal: CalendarSession["goal"]; group_members: { students: SessionMember | null }[] | null };
+  attendance: CalendarSession["attendance"] | null;
 };
 
 const hhmm = (t: string) => t.slice(0, 5);
 
-function toSession({ class_groups: g, ...s }: SessionRow): CalendarSession {
+function toSession({ class_groups: g, attendance, ...s }: SessionRow): CalendarSession {
   const members = (g.group_members ?? [])
     .map((m) => m.students)
     .filter((m): m is SessionMember => m !== null)
     .sort((a, b) => a.full_name.localeCompare(b.full_name));
-  return { ...s, start_time: hhmm(s.start_time), end_time: hhmm(s.end_time), name: g.name, goal: g.goal, members };
+  return {
+    ...s, start_time: hhmm(s.start_time), end_time: hhmm(s.end_time), name: g.name, goal: g.goal, members,
+    attendance: attendance ?? [],
+  };
 }
 
 /** Sessions with date in [from, to] (inclusive, "YYYY-MM-DD"). */

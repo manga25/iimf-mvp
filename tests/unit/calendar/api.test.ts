@@ -31,6 +31,7 @@ const session = (over: Partial<CalendarSession> = {}): CalendarSession => ({
     { id: "a", full_name: "Ana", phone: "+351911111111", guardian_name: "Rita", guardian_phone: "+351922222222" },
     { id: "r", full_name: "Rui", phone: "+351933333333", guardian_name: null, guardian_phone: null },
   ],
+  attendance: [],
   ...over,
 });
 

@@ -1,3 +1,4 @@
+import type { AttendanceRecord } from "@/lib/attendance/types";
 import type { Goal } from "@/lib/students/types";
 
 export const MODALITIES = ["in_person", "online"] as const;
@@ -33,4 +34,6 @@ export type CalendarSession = {
   modality: Modality;
   blocked_period_id: string | null;
   members: SessionMember[];
+  /** Stored (non-default) attendance rows; a member without one is Present. */
+  attendance: AttendanceRecord[];
 };
